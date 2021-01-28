@@ -27,11 +27,11 @@
     <ul></ul>
 
     <script>
-      const input = document.querySelector("textarea");
-      const submitBtn = document.getElementById("submit");
-      const resetBtn = document.getElementById("reset");
-      const wordsList = document.querySelector("ul");
-      let words = [];
+      var input = document.querySelector("textarea");
+      var submitBtn = document.getElementById("submit");
+      var resetBtn = document.getElementById("reset");
+      var wordsList = document.querySelector("ul");
+      var words = [];
 
       submitBtn.addEventListener("click", submit);
       resetBtn.addEventListener("click", reset);
@@ -39,22 +39,29 @@
       function submit() {
         wordsList.innerHTML = words;
 
-        let inputSplit = input.value.split(/[^\w']/);
-        inputSplit = inputSplit.filter((e) => e != "");
-        inputSplit = inputSplit.map((e) => e.toLowerCase());
-        let obj = {};
-        inputSplit.forEach((e) => {
-          obj[e] = obj[e] ? obj[e] + 1 : 1;
+        var inputSplit = input.value.split(/[^\w']/);
+        inputSplit = inputSplit.filter(function (e) {
+          return e != "";
         });
-        for (let word in obj) {
-          words.push(`${word}:${obj[word]}`);
+        inputSplit = inputSplit.map(function (e) {
+          return e.toLowerCase();
+        });
+        var obj = {};
+        for (var i = 0; i < inputSplit.length; i++) {
+          obj[inputSplit[i]] = obj[inputSplit[i]] ? obj[inputSplit[i]] + 1 : 1;
         }
-        words.forEach((e) => {
-          let newRow = `<li>${e}</li>`;
-          let li = document.createElement("li");
-          li.appendChild(document.createTextNode(`${e}`));
+
+        var keyArr = Object.keys(obj);
+        for (var i = 0; i < keyArr.length; i++) {
+          words.push(`${keyArr[i]}: ${obj[keyArr[i]]} `);
+        }
+
+        for (var i = 0; i < words.length; i++) {
+          var li = document.createElement("li");
+          li.appendChild(document.createTextNode(`${words[i]}`));
           wordsList.appendChild(li);
-        });
+        }
+
         input.value = "";
         words = [];
       }
